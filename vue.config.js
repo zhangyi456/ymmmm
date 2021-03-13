@@ -2,6 +2,16 @@ const path = require('path')
 module.exports = {
   lintOnSave: false,
   chainWebpack: config => {
+    // 使用externals设置排除项
+    config.set('externals', {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      axios: 'axios',
+      lodash: '_',
+      echarts: 'echarts',
+      'element-ui': 'Element',
+      'vue-quill-editor': 'VueQuillEditor'
+    })
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
     svgRule
