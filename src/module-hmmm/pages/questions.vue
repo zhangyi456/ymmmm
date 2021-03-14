@@ -24,11 +24,12 @@
           :model="formSelect"
           ref="formSelect"
         >
-          <el-form-item label="学科" class="el-col el-col-6" prop="subjectID">
+          <el-form-item label="学科" class="el-col el-col-6" prop="subjectID" >
             <el-select
               v-model="formSelect.subjectID"
               placeholder="请选择"
               @change="selectSubjectOne(formSelect.subjectID)"
+              style="width: 100%"
             >
               <el-option
                 :label="item.label"
@@ -45,7 +46,7 @@
             class="el-col el-col-6"
             prop="catalogID"
           >
-            <el-select v-model="formSelect.catalogID" placeholder="请选择">
+            <el-select v-model="formSelect.catalogID" placeholder="请选择" style="width: 100%">
               <el-option
                 :label="item.label"
                 :value="item.value"
@@ -56,7 +57,7 @@
           </el-form-item>
 
           <el-form-item label="标签" class="el-col el-col-6" prop="tags">
-            <el-select v-model="formSelect.tags" placeholder="请选择">
+            <el-select v-model="formSelect.tags" placeholder="请选择" style="width: 100%">
               <el-option
                 :label="item.label"
                 :value="item.value"
@@ -78,7 +79,7 @@
             class="el-col el-col-6"
             prop="questionType"
           >
-            <el-select v-model="formSelect.questionType" placeholder="请选择">
+            <el-select v-model="formSelect.questionType" placeholder="请选择" style="width: 100%">
               <el-option label="单选" value="1"></el-option>
               <el-option label="多选" value="2"></el-option>
               <el-option label="简答" value="3"></el-option>
@@ -86,7 +87,7 @@
           </el-form-item>
 
           <el-form-item label="难度" class="el-col el-col-6" prop="difficulty">
-            <el-select v-model="formSelect.difficulty" placeholder="请选择">
+            <el-select v-model="formSelect.difficulty" placeholder="请选择" style="width: 100%">
               <el-option label="简单" value="1"></el-option>
               <el-option label="一般" value="2"></el-option>
               <el-option label="困难" value="3"></el-option>
@@ -94,7 +95,7 @@
           </el-form-item>
 
           <el-form-item label="方向" class="el-col el-col-6" prop="direction">
-            <el-select v-model="formSelect.direction" placeholder="请选择">
+            <el-select v-model="formSelect.direction" placeholder="请选择" style="width: 100%">
               <el-option
                 :label="item"
                 :value="index"
@@ -105,7 +106,7 @@
           </el-form-item>
 
           <el-form-item label="录入人" class="el-col el-col-6" prop="creatorID">
-            <el-select v-model="formSelect.creatorID" placeholder="请选择">
+            <el-select v-model="formSelect.creatorID" placeholder="请选择" style="width: 100%">
               <el-option label="超级管理员" value="0"></el-option>
               <el-option label="录入管理员" value="1"></el-option>
             </el-select>
@@ -129,7 +130,7 @@
               placeholder="请选择"
               class="el-col el-col-12"
               @change="handleProvince"
-              :style="{ width: '170%' }"
+              :style="{ width: '120%' }"
             >
               <el-option
                 v-for="item in citySelect.province"
@@ -141,7 +142,7 @@
           </el-form-item>
           <el-form-item class="el-col-3 oness" prop="city">
             <el-select
-              :style="{ margin: '0 0 0 50px', width: '70%' }"
+              :style="{ margin: '0 0 0 50px', width: '75%' }"
               v-model="formSelect.city"
               placeholder="请选择"
               class="el-col el-col-12"

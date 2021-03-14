@@ -36,9 +36,7 @@
                   :value="item.value"
                   v-for="item in twoDirectory"
                   :key="item.value"
-                >
-                  {{ item.label }}</el-option
-                >
+                ></el-option>
               </el-select>
             </el-form-item>
 
@@ -62,7 +60,6 @@
                 v-model="addQuestion.province"
                 placeholder="请选择"
                 @change="handleProvince"
-                ref="refprovince"
               >
                 <el-option
                   v-for="item in citySelect.province"
@@ -227,19 +224,15 @@
 
             <el-form-item
               label="试题标签："
-              class="answerQuestion"
               prop="tags"
+              required
               id="addQuestion"
             >
-              <el-select
-                v-model="addQuestion.tags"
-                multiple
-                placeholder="请选择"
-              >
+              <el-select v-model="addQuestion.tags" placeholder="请选择">
                 <el-option
                   :label="item.label"
                   :value="item.label"
-                  v-for="item in tagList"
+                  v-for="item in taglist"
                   :key="item.value"
                 ></el-option>
               </el-select>
@@ -313,7 +306,7 @@ export default {
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-            ['list', 'header', 'blockquote'],
+            [{ list: 'ordered' }, { list: 'bullet' }, 'blockquote'],
             ['code-block', 'image', 'link']
           ]
         }
@@ -354,6 +347,7 @@ export default {
         ],
         tags: [{ required: true, message: '请选择标签', trigger: 'blur' }]
       },
+      taglist: [], // 标签列表
       English: [
         'A',
         'B',
@@ -410,7 +404,7 @@ export default {
       var res = await simpless({
         subjectID: id
       })
-      this.tagList = res.data
+      this.taglist = res.data
     },
     // 获取省
     getCityData: function() {
@@ -432,41 +426,18 @@ export default {
       const ids = this.$route.query.id
       if (ids) {
         const { data } = await detail({ id: ids })
-        // console.log(data)
         // !因为获取radio需要选中，需要false和true，label和v-model都为true时是选中，而返回值为0，1，所以要进行转化
         data.options = data.options.map(item => {
           item.isRight = item.isRight === 1
           return item
         })
-        // 修改过来的时候显示目录名称
-        const res = await simples()
-        const i = res.data.find(item => {
-          return item.value == data.catalogID
-        })
-        this.twoDirectory.push(i)
-
-        // 获取城市
-        // console.log(data.province)
-        this.citySelect.cityDate = citys(data.province)
-        this.addQuestion.city = this.citySelect.cityDate[0]
-        // this.addQuestion.city = null
-
-        // 修改获取标签
-        var ress = await simpless()
-        console.log(data.tags)
-      
-        const q = data.tags.split(',')
-        q.forEach((item, index) => {
-          ress.data.forEach((item1, index1) => {
-            if (item1.label == item) {
-              console.log(item1)
-              this.tagList.push(item1)
-            }
-          })
-        })
-    
-
+        // 修改试题获取的数据进行处理
         this.addQuestion = data
+        const res = await simples({
+          subjectID: this.addQuestion.subjectID
+        })
+        this.twoDirectory = res.data
+        this.citySelect.cityDate = citys(this.addQuestion.province)
       }
     },
     // 选择了单选，只让当前生效
@@ -481,13 +452,13 @@ export default {
     },
     // 提交试题
     SubmitQuestions() {
-      this.addQuestion.tags = this.addQuestion.tags.join()
+      console.log(this.addQuestion)
       this.$refs.questionsForm.validate(async valid => {
         if (valid) {
           console.log(this.addQuestion)
-          // await add(this.addQuestion)
-          // this.$message.success('添加题库成功')
-          // this.$router.push('/questions/list')
+          await add(this.addQuestion)
+          this.$message.success('添加题库成功')
+          this.$router.push('/questions/list')
         }
       })
     },
@@ -550,7 +521,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .el-select {
   width: 43%;
 }
@@ -566,7 +537,7 @@ export default {
 ::v-deep.ql-editor {
   height: 200px !important;
 }
-::v-deep#remarksText {
+::v-deep #remarksText {
   height: 100px;
 }
 /* // 选项样式------------- */
@@ -622,4 +593,5 @@ export default {
     }
   }
 }
+
 </style>
