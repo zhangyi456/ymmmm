@@ -9,7 +9,6 @@ module.exports = {
       axios: 'axios',
       lodash: '_',
       echarts: 'echarts',
-      'element-ui': 'Element',
       'vue-quill-editor': 'VueQuillEditor'
     })
     const svgRule = config.module.rule('svg')

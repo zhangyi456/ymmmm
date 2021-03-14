@@ -5,12 +5,12 @@
     <div class="container">
       <el-card shadow="never" style="margin: 15px">
         <!-- <el-card shadow="never"> -->
-      <el-row :gutter="20">
-        <el-form
-          label-width="80px"
-          ref="requestParameters"
-          :model="requestParameters"
-        >
+        <el-row :gutter="20">
+          <el-form
+            label-width="80px"
+            ref="requestParameters"
+            :model="requestParameters"
+          >
             <el-col :span="6">
               <el-form-item label="关键字" prop="keyword">
                 <el-input
@@ -30,29 +30,26 @@
                 </el-select>
               </el-form-item>
             </el-col>
-        </el-form>
-            <el-col :span="2">
-              <el-button plain size="small" @click="clear">清除</el-button>
-            </el-col>
-            <el-col :span="1">
-              <el-button type="primary" size="small" @click="handleFilter"
-                >搜索</el-button
-              >
-            </el-col>
-            <el-col
-              :span="7"
-              style="position: relative; top: 0; right: -400px;"
+          </el-form>
+          <el-col :span="2">
+            <el-button plain size="small" @click="clear">清除</el-button>
+          </el-col>
+          <el-col :span="1">
+            <el-button type="primary" size="small" @click="handleFilter"
+              >搜索</el-button
             >
-              <el-button
-                type="success"
-                size="small"
-                class="el-icon-edit newskills"
-                style="margin-left: -46px;"
-                @click="handleChange('add'), (articleVisible = true)"
-                >新增文章</el-button
-              >
-            </el-col>
-          </el-row>
+          </el-col>
+          <el-col :span="7" style="position: relative; top: 0; right: -400px;">
+            <el-button
+              type="success"
+              size="small"
+              class="el-icon-edit newskills"
+              style="margin-left: -46px;"
+              @click="handleChange('add'), (articleVisible = true)"
+              >新增文章</el-button
+            >
+          </el-col>
+        </el-row>
         <!-- 消息提示文案 -->
         <el-alert
           :title="alertText"
@@ -69,10 +66,15 @@
           <el-table-column type="index" label="序号" align="center">
           </el-table-column>
           <el-table-column prop="title" label="文章标题">
-              <template slot-scope="scope">
-                <span>{{scope.row.title}}</span>
-                <span v-if="scope.row.videoURL" class="el-icon-film" @click="open(scope.row.videoURL)"></span>
-               </template>
+            <template slot-scope="scope">
+              <span>{{ scope.row.title }}</span>
+              <span
+                v-if="scope.row.videoURL"
+                class="el-icon-film"
+                @click="open(scope.row.videoURL)"
+                style="color: blue"
+              ></span>
+            </template>
           </el-table-column>
           <el-table-column prop="visits" label="阅读数"> </el-table-column>
           <el-table-column prop="username" label="录入人"> </el-table-column>
@@ -137,7 +139,7 @@
           </div>
         </div>
         <!-- 分页结束 -->
-  
+
         <!-- 预览弹框 -->
         <el-dialog
           :append-to-body="true"
@@ -145,7 +147,6 @@
           :visible.sync="seeFlag"
           width="50%"
           height="100%"
-          :before-close="handleClosetwo"
         >
           <articles-preview :showData="showData"></articles-preview>
           <span slot="footer" class="dialog-footer">
@@ -161,7 +162,6 @@
           :visible.sync="articleVisible"
           width="50%"
           height="100%"
-          :before-close="handleClose"
         >
           <!-- 修改 -->
           <el-form
@@ -198,22 +198,24 @@
             </el-form-item>
           </el-form>
           <!-- 修改 -->
-
         </el-dialog>
         <!-- 视频弹窗 -->
         <el-dialog
-         :append-to-body="true"
-          class="eldag"
+          :append-to-body="true"
+          class="namedia"
           :visible.sync="showVideo"
-          width="48%"
-          height="50%">
-            <video width="680" height="500" controls autoplay>
-  <source :src="src" type="video/ogg">
-  <object :data="src" width="320" height="240">
-    <embed width="320" height="240" :src="src">
-  </object>
-</video>
-          </el-dialog>
+          width="0"
+          height="0"
+          :style="{ padding: 0 }"
+        >
+          <span class="el-icon-close" @click="closecl"></span>
+          <video width="680" height="520" controls autoplay class="video">
+            <source :src="src" type="video/ogg" />
+            <object :data="src" width="330" height="260">
+              <embed width="330" height="260" :src="src" />
+            </object>
+          </video>
+        </el-dialog>
         <!-- 弹框，修改添加模块 -->
       </el-card>
     </div>
@@ -253,7 +255,7 @@ export default {
         }
       },
       showVideo: false,
-      //富文本编辑器内容
+      // 富文本编辑器内容
       form: {
         name: '111'
       },
@@ -298,34 +300,25 @@ export default {
   methods: {
     articleVisiblef() {
       this.articleVisible = false
-    }, //关闭弹窗
+    }, // 关闭弹窗
     async getArticleList() {
       this.listLoading = true
       // this.requestParameters
       const { data } = await list(this.requestParameters)
-      this.alertText = `数据一共${data.counts}条` //总共数据
-      this.dataList = data.items //渲染数据的变量
+      this.alertText = `数据一共${data.counts}条` // 总共数据
+      this.dataList = data.items // 渲染数据的变量
       this.total = data.counts
       this.listLoading = false
-      },
-      //视频
-      open (url) {
-        this.showVideo = true
-        this.src = url
-      },
+    },
+    // 视频
+    open(url) {
+      this.showVideo = true
+      this.src = url
+    },
     // 搜索信息
     handleFilter() {
       this.requestParameters.page = 1
       this.getArticleList(this.requestParameters)
-    },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          // 发送文章数据
-
-          done()
-        })
-        .catch(_ => {})
     },
     // 搜索的项目
     // 添加、编辑之后表单清空
@@ -364,6 +357,9 @@ export default {
           this.$message.error('为必填项!')
         }
       })
+    },
+    closecl() {
+      this.showVideo = false
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -410,7 +406,7 @@ export default {
         // await remove (val)
         await remove(val)
         this.$message.success('删除成功')
-        this.getArticleList() //刷新列表
+        this.getArticleList() // 刷新列表
       } catch (error) {
         this.$message.fail('删除失败' + error)
         // !删除bug
@@ -419,13 +415,6 @@ export default {
             this.queryInfo.pagenum > 1 ? this.queryInfo.pagenum - 1 : 1
         }
       }
-    },
-    handleClosetwo(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
     }
   }
 }
@@ -451,11 +440,55 @@ export default {
 .box-card {
   width: 480px;
 }
-::v-deep .el-dialog__header .eldag {
-  background-color:transparent !important;
+::v-deep .el-dialog__header .namedia {
+  position: relative;
+  top: -900px;
+  left: -700px;
+  padding: 0 !important;
+  background-color: transparent !important;
   display: none !important;
+  border: 0 !important;
+  background-color: aliceblue;
 }
-::v-deep .el-dialog__footer .eldag {
-  background-color:transparent !important; 
+::v-deep .el-dialog__footer .namedia {
+  padding: 0 !important;
+  background-color: transparent !important;
+  display: none !important;
+  border: 0 !important;
+}
+::v-deep .el-icon-close:before .namedia {
+  padding: 0 !important;
+  display: none;
+  border: 0 !important;
+}
+::v-deep .el-dialog__body .namedia {
+  padding: 0 !important;
+  position: relative;
+  top: -150px;
+  left: -100px;
+  border: 0 !important;
+}
+::v-deep .el-dialog__body .video {
+  padding: 0 !important;
+  border: 0 !important;
+  position: absolute;
+  // left: -310px;
+  top: 200px;
+  transform: translate(-50%, -50%);
+}
+::v-deep.namedia {
+  .el-dialog {
+    .el-dialog__header {
+      padding: 0;
+    }
+  }
+}
+.el-icon-close {
+  position: absolute;
+  z-index: 999;
+  color: white;
+  font-size: 40px;
+  top: -70px;
+  left: 0;
 }
 </style>
